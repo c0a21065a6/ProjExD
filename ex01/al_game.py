@@ -14,9 +14,9 @@ def shutudai(alphabet):
 
     abs_chars = random.sample(all_chars, num_of_abs_chars)
     print("欠損文字（デバッグ用）:")
-    for c in abs_chars:
-        print(c, end = " ")
-    print()
+    #for c in abs_chars:
+    #    print(c, end = " ")
+    #print()
 
     print("表示文字:")
     for c in all_chars:

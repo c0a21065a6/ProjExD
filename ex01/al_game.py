@@ -16,7 +16,7 @@ def shutudai(alphabet):
     #print("欠損文字（デバッグ用）:")
     #for c in abs_chars:
     #    print(c, end = " ")
-    #print()
+    print()
 
     print("表示文字:")
     for c in all_chars:

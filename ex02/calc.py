@@ -31,9 +31,7 @@ def button_click(event):
     
     elif item == "AC": #AllClearボタンの実装
         entry.delete(0, tk.END)
-    
-    
-
+        
     else:
         #tkm.showinfo("", f"{num}ボタンがクリックされました")
         #練習6

@@ -49,7 +49,7 @@ entry.grid(row = 0, column = 0, columnspan = 3)
 
 # 練習２
 r, c = 2, 2
-for num in range(9, -1, -1):
+for num in range(9, -1, -1): #数字ボタンの作成
     button = tk.Button(root, text=f"{num}", width=4, height=2, font=("", 30))
     if num == 0:
         c = 1
@@ -61,9 +61,10 @@ for num in range(9, -1, -1):
         c = 2
 
 #練習5
+#四則演算ボタンの作成
 r = 1
 c = 3
-operators = ["+", "-", "×", "÷", "="]
+operators = ["+", "-", "×", "÷", "="] 
 for ope in operators:
     button = tk.Button(root, text=f"{ope}", width=4, height=2, font=("", 30))
     button.grid(row=r, column=c)
@@ -75,9 +76,10 @@ for ope in operators:
         if r == 5 and c == 2:
             c -= 1
 
+#各種ボタンの作成
 r = 1
 c = 0
-other = ["%", ".", "√"]
+other = ["%", ".", "√"] 
 for oth in other:
     button = tk.Button(root, text=f"{oth}", width=4, height=2, font=("", 30))
     button.grid(row=r, column=c)
@@ -87,10 +89,12 @@ for oth in other:
         r += 1
         c = 0
 
+#オールクリアボタンの作成
 button = tk.Button(root, text=f"AC", width=4, height=2, font=("", 30))
 button.grid(row=0, column=3)
 button.bind("<1>", button_click)
 
+#括弧ボタンの作成
 r = 5
 c = 0
 kakko = ["(", ")"]

@@ -15,15 +15,19 @@ def button_click(event):
                 siki = siki[0:i] + "/" + siki[i + 1:]
                 
             #print(siki[i])
-        res = eval(siki)
-        entry.delete(0, tk.END)
-        if num == "%": #"%"ボタンの実装
-            res = res/100
+        try:
+            res = eval(siki)
+            entry.delete(0, tk.END)
+            if num == "%": #"%"ボタンの実装
+                res = res/100
             
-        elif num == "√": #"√"ボタンの実装
-            res = res ** (1/2)
+            elif num == "√": #"√"ボタンの実装
+                res = res ** (1/2)
 
-        entry.insert(tk.END, res)
+            entry.insert(tk.END, res)
+        
+        except:
+            tkm.showinfo("", f"無効な式が入力されました") #無効な式が入力され場合の処理
     
     elif num == "AC": #AllClearボタンの実装
         entry.delete(0, tk.END)
@@ -86,5 +90,15 @@ for oth in other:
 button = tk.Button(root, text=f"AC", width=4, height=2, font=("", 30))
 button.grid(row=0, column=3)
 button.bind("<1>", button_click)
+
+r = 5
+c = 0
+kakko = ["(", ")"]
+for ka in kakko:
+    button = tk.Button(root, text=f"{ka}", width=4, height=2, font=("", 30))
+    button.grid(row=r, column=c)
+    button.bind("<1>", button_click)
+    c += 2
+
 
 root.mainloop()

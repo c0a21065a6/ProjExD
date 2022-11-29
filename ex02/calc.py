@@ -5,8 +5,12 @@ import tkinter.messagebox as tkm
 def button_click(event):
     btn = event.widget
     num = btn["text"]
+    #練習7
     if num == "=":
-        pass
+        siki = entry.get() #数式の文字列
+        res = eval(siki)
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, res)
     else:
         #tkm.showinfo("", f"{num}ボタンがクリックされました")
         #練習6

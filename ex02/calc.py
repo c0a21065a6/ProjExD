@@ -4,9 +4,9 @@ import tkinter.messagebox as tkm
 # 練習３
 def button_click(event):
     btn = event.widget
-    num = btn["text"]
+    item = btn["text"]
     #練習7
-    if num == "=" or num == "%" or num == "√":
+    if item == "=" or item == "%" or item == "√":
         siki = entry.get() #数式の文字列
         for i in range(len(siki)): #"×","÷"を"*","/"に換える
             if siki[i] == "×":
@@ -18,10 +18,10 @@ def button_click(event):
         try:
             res = eval(siki)
             entry.delete(0, tk.END)
-            if num == "%": #"%"ボタンの実装
+            if item == "%": #"%"ボタンの実装
                 res = res/100
             
-            elif num == "√": #"√"ボタンの実装
+            elif item == "√": #"√"ボタンの実装
                 res = res ** (1/2)
 
             entry.insert(tk.END, res)
@@ -29,7 +29,7 @@ def button_click(event):
         except:
             tkm.showinfo("", f"無効な式が入力されました") #無効な式が入力され場合の処理
     
-    elif num == "AC": #AllClearボタンの実装
+    elif item == "AC": #AllClearボタンの実装
         entry.delete(0, tk.END)
     
     
@@ -37,7 +37,7 @@ def button_click(event):
     else:
         #tkm.showinfo("", f"{num}ボタンがクリックされました")
         #練習6
-        entry.insert(tk.END, num)
+        entry.insert(tk.END, item)
 
 # 練習１
 root = tk.Tk()

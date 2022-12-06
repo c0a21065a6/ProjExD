@@ -114,7 +114,6 @@ if __name__ == "__main__":
     canvas.pack()
     
     maze_lst = mm.make_maze(15, 9) #迷路の生成
-    #mm.print_maze(maze_lst)
     mm.show_maze(canvas, maze_lst) #迷路の表示
 
     kokaton = tk.PhotoImage(file = "fig/0.png") #画像の読み込み

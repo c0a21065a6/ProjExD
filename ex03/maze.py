@@ -48,8 +48,7 @@ def main_proc():#こうかとんの挙動
     if cx == gx and cy == gy:
         mx, my = 1, 1
         tkm.showinfo("Goal", f"Congratulations!")
-    cx, cy = mx*100 + 50, my*100 + 50
-            
+    cx, cy = mx*100 + 50, my*100 + 50   
     canvas.coords("kokaton", cx, cy)
     
     root.after(100, main_proc)

@@ -49,11 +49,9 @@ def main_proc():#こうかとんの挙動
         mx, my = 1, 1
         tkm.showinfo("Goal", f"Congratulations!")
     cx, cy = mx*100 + 50, my*100 + 50
-    
-        
+            
     canvas.coords("kokaton", cx, cy)
     
-
     root.after(100, main_proc)
 
 def karasu_proc(): #敵をランダムに動かす関数

@@ -17,13 +17,13 @@ def main_proc():#こうかとんの挙動
     if key == "Up":
         my -= 1
 
-    if key == "Down":
+    elif key == "Down":
         my += 1
     
-    if key == "Left":
+    elif key == "Left":
         mx -= 1
 
-    if key == "Right":
+    elif key == "Right":
         mx += 1
 
     if maze_lst[mx][my] == 1:
@@ -32,13 +32,13 @@ def main_proc():#こうかとんの挙動
         if key == "Up":
             my += 1
 
-        if key == "Down":
+        elif key == "Down":
             my -= 1
         
-        if key == "Left":
+        elif key == "Left":
             mx += 1
 
-        if key == "Right":
+        elif key == "Right":
             mx -= 1
 
     if (cx == tx and cy == ty) or (cx == tx2 and cy == ty2): #敵と接触したら
@@ -63,15 +63,15 @@ def karasu_proc(): #敵をランダムに動かす関数
         ky -= 1
         kx2 -= 1
 
-    if rd == 1:
+    elif rd == 1:
         ky += 1
         ky2 += 1
     
-    if rd == 2:
+    elif rd == 2:
         kx -= 1
         ky2 -= 1
 
-    if rd == 3:
+    elif rd == 3:
         kx += 1
         kx2 += 1
 
@@ -79,26 +79,26 @@ def karasu_proc(): #敵をランダムに動かす関数
         if rd == 0:
             ky += 1
 
-        if rd == 1:
+        elif rd == 1:
             ky -= 1
         
-        if rd == 2:
+        elif rd == 2:
             kx += 1
 
-        if rd == 3:
+        elif rd == 3:
             kx -= 1
 
     if maze_lst[kx2][ky2] == 1:
         if rd == 0:
             kx2 += 1
 
-        if rd == 1:
+        elif rd == 1:
             ky2 -= 1
         
-        if rd == 2:
+        elif rd == 2:
             ky2 += 1
 
-        if rd == 3:
+        elif rd == 3:
             kx2 -= 1
     tx, ty = kx*100 + 50, ky*100 + 50
     tx2, ty2 = kx2*100 + 50, ky2*100 + 50

@@ -41,7 +41,7 @@ def main_proc():#こうかとんの挙動
         if key == "Right":
             mx -= 1
 
-    if cx == tx and cy == ty: #敵と接触したら
+    if (cx == tx and cy == ty) or (cx == tx2 and cy == ty2): #敵と接触したら
         mx = 1
         my = 1
         tkm.showinfo("警告", f"Crush!")
@@ -57,19 +57,23 @@ def main_proc():#こうかとんの挙動
     root.after(100, main_proc)
 
 def karasu_proc(): #敵をランダムに動かす関数
-    global kx, ky, tx, ty
+    global kx, ky, tx, ty, kx2, ky2, tx2, ty2
     rd = randint(0, 3)
     if rd == 0:
         ky -= 1
+        kx2 -= 1
 
     if rd == 1:
         ky += 1
+        ky2 += 1
     
     if rd == 2:
         kx -= 1
+        ky2 -= 1
 
     if rd == 3:
         kx += 1
+        kx2 += 1
 
     if maze_lst[kx][ky] == 1:
         if rd == 0:
@@ -84,10 +88,24 @@ def karasu_proc(): #敵をランダムに動かす関数
         if rd == 3:
             kx -= 1
 
+    if maze_lst[kx2][ky2] == 1:
+        if rd == 0:
+            kx2 += 1
+
+        if rd == 1:
+            ky2 -= 1
+        
+        if rd == 2:
+            ky2 += 1
+
+        if rd == 3:
+            kx2 -= 1
     tx, ty = kx*100 + 50, ky*100 + 50
+    tx2, ty2 = kx2*100 + 50, ky2*100 + 50
     canvas.coords("karasu", tx, ty)
+    canvas.coords("karasu2", tx2, ty2)
     
-    root.after(10, karasu_proc)
+    root.after(100, karasu_proc)
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -106,12 +124,15 @@ if __name__ == "__main__":
     sx, sy = 1*100+50, 1*100+50 #スタート地点の座標
     goal = tk.PhotoImage(file = "G.png") #ゴール地点
     kx, ky = 10, 6 #敵の初期位置
+    kx2, ky2 = 1, 4
     tx, ty = kx*100 + 50, ky*100 + 50
+    tx2, ty2 = kx2*100 + 50, ky2*100 + 50
     gx, gy = 13*100+50, 7*100+50 #ゴールの座標
     karasu = tk.PhotoImage(file = "karasu.png") #敵の座標の読み込み
     canvas.create_image(sx, sy, image = start) #スタートの表示
     canvas.create_image(gx, gy, image = goal) #ゴールの表示
     canvas.create_image(tx, ty, image = karasu, tag = "karasu") #敵の表示
+    canvas.create_image(tx2, ty2, image = karasu, tag = "karasu2") #敵の表示
     canvas.create_image(cx, cy, image = kokaton, tag = "kokaton") #こうかとんの表示
     
     key = "" #キーの初期化

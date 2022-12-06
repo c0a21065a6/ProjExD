@@ -2,6 +2,8 @@ import tkinter as tk
 import maze_maker as mm
 import tkinter.messagebox as tkm
 from random import randint
+
+
 def key_down(event):#キーが押された際の関数
     global key
     key = event.keysym
@@ -39,19 +41,22 @@ def main_proc():#こうかとんの挙動
         if key == "Right":
             mx -= 1
 
-    if cx == tx and cy == ty:
+    if cx == tx and cy == ty: #敵と接触したら
         mx = 1
         my = 1
         tkm.showinfo("警告", f"Crush!")
+    if cx == gx and cy == gy:
+        mx, my = 1, 1
+        tkm.showinfo("Goal", f"Congratulations!")
     cx, cy = mx*100 + 50, my*100 + 50
     
         
     canvas.coords("kokaton", cx, cy)
-    if cx == gx and cy == gy:
-        tkm.showinfo("Goal", f"Congratulations!")
+    
+
     root.after(100, main_proc)
 
-def karasu_proc():
+def karasu_proc(): #敵をランダムに動かす関数
     global kx, ky, tx, ty
     rd = randint(0, 3)
     if rd == 0:
@@ -82,7 +87,7 @@ def karasu_proc():
     tx, ty = kx*100 + 50, ky*100 + 50
     canvas.coords("karasu", tx, ty)
     
-    root.after(100, karasu_proc)
+    root.after(10, karasu_proc)
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -97,13 +102,13 @@ if __name__ == "__main__":
     kokaton = tk.PhotoImage(file = "fig/0.png") #画像の読み込み
     mx, my = 1, 1 #こうかとんの初期位置
     cx, cy = mx*100 + 50, my*100 + 50 #こうかとんの初期位置
-    start = tk.PhotoImage(file = "s.png")
-    sx, sy = 1*100+50, 1*100+50
-    goal = tk.PhotoImage(file = "G.png")
-    kx, ky = 6, 6
+    start = tk.PhotoImage(file = "s.png") #スタート地点
+    sx, sy = 1*100+50, 1*100+50 #スタート地点の座標
+    goal = tk.PhotoImage(file = "G.png") #ゴール地点
+    kx, ky = 10, 6 #敵の初期位置
     tx, ty = kx*100 + 50, ky*100 + 50
-    gx, gy = 13*100+50, 7*100+50
-    karasu = tk.PhotoImage(file = "karasu.png")
+    gx, gy = 13*100+50, 7*100+50 #ゴールの座標
+    karasu = tk.PhotoImage(file = "karasu.png") #敵の座標の読み込み
     canvas.create_image(sx, sy, image = start) #スタートの表示
     canvas.create_image(gx, gy, image = goal) #ゴールの表示
     canvas.create_image(tx, ty, image = karasu, tag = "karasu") #敵の表示

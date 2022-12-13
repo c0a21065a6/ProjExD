@@ -164,6 +164,8 @@ def main():
         #if tori_rct.colliderect(goal_rct): #ゴールに当たったら終了
          #   goal = True
             #return
+        
+        
         pg.display.update()
         clock.tick(1000)
 

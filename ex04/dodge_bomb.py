@@ -2,6 +2,7 @@ import pygame as pg
 import sys
 import random
 
+
 def check_bound(obj_rct, scr_rct):
     #第1引数：こうかとんrectまたは爆弾rect
     #第2引数：スクリーンrect
@@ -16,12 +17,12 @@ def check_bound(obj_rct, scr_rct):
 
 
 def main():
-    bomb = 3
+    bomb = 3 #爆弾の数
     count = 0
-    price = False
+    price = False #無敵モードの可否
+    goal = False
     clock = pg.time.Clock()
 
-    #練習１
     pg.display.set_caption("逃げろ！こうかとん")
     scrn_sfc = pg.display.set_mode((1600, 900))
     scrn_rct = scrn_sfc.get_rect()
@@ -29,7 +30,7 @@ def main():
     pgbg_sfc = pg.image.load("fig/pg_bg.jpg")
     pgbg_rct = pgbg_sfc.get_rect()
     
-    #練習３
+    #こうかとんの仕様
     tori_sfc = pg.image.load("fig/3.png")
     tori_sfc = pg.transform.rotozoom(tori_sfc, 0, 2.0)
     tori_rct = tori_sfc.get_rect()
@@ -44,11 +45,18 @@ def main():
     item_rct.centery = random.randint(0, scrn_rct.width)
     scrn_sfc.blit(item_sfc, item_rct)
 
+    #ゴールの仕様
+    goal_sfc = pg.image.load("fig/goal.jpeg")
+    goal_sfc = pg.transform.rotozoom(goal_sfc, 0, 0.01)
+    goal_rct = item_sfc.get_rect()
+    goal_rct.centerx = random.randint(0, scrn_rct.width)
+    goal_rct.centery = random.randint(0, scrn_rct.width)
+    
 
-    #練習５
-    bomb_rct_lst = []
-    vx = []
-    vy = []
+    #爆弾の仕様
+    bomb_rct_lst = [] #爆弾の情報を入れるリスト
+    vx = [] #爆弾のx方向の動きを入れるリスト
+    vy = [] #爆弾のy方向の動きを入れるリスト
     for i in range(bomb):
         bomb_sfc = pg.Surface((20, 20))
         bomb_sfc.set_colorkey((0, 0, 0))
@@ -59,8 +67,8 @@ def main():
         scrn_sfc.blit(bomb_sfc, bomb_rct_lst[i])
         vx.append(random.randint(-1, 1)) 
         vy.append(random.randint(-1, 1))
+    #いくつかの爆弾を作成した．
 
-    #練習2
     while True:
         scrn_sfc.blit(pgbg_sfc, pgbg_rct)
 
@@ -68,8 +76,7 @@ def main():
             if event.type == pg.QUIT:
                 return
         
-        #れんしゅう４
-        key_dct = pg.key.get_pressed()
+        key_dct = pg.key.get_pressed() #こうかとんを動かす
         if key_dct[pg.K_UP]:
             tori_rct.centery -= 1
         
@@ -82,7 +89,7 @@ def main():
         if key_dct[pg.K_RIGHT]:
             tori_rct.centerx += 1
 
-        if check_bound(tori_rct, scrn_rct) != (+1, +1):
+        if check_bound(tori_rct, scrn_rct) != (+1, +1): #壁に当たった場合の動き
             if key_dct[pg.K_UP]:
                 tori_rct.centery += 1
             
@@ -95,11 +102,11 @@ def main():
             if key_dct[pg.K_RIGHT]:
                 tori_rct.centerx -= 1
         
-        if count%2000 == 0:
+        if count%2000 == 0: #無敵アイテムの位置を2000フレームごとに変更する
             item_rct.centerx = random.randint(0, scrn_rct.width)
             item_rct.centery = random.randint(0, scrn_rct.width)
 
-        if price == False:
+        if price == False: #無敵モードではない時の挙動
             scrn_sfc.blit(tori_sfc, tori_rct)
             if count > 4000:
                 scrn_sfc.blit(item_sfc, item_rct)
@@ -108,20 +115,17 @@ def main():
                     price = True
                     tori_nsfc = pg.image.load("fig/6.png")
                     tori_nsfc = pg.transform.rotozoom(tori_nsfc, 0, 2.0)
-                    #tori_rct = tori_sfc.get_rect()
-                    #tori_rct.center = tori_rct.centerx, tori_rct.centery
                     scrn_sfc.blit(tori_nsfc, tori_rct)
-        elif price:
+
+        elif price: #無敵モードの時の挙動
             scrn_sfc.blit(tori_nsfc, tori_rct)
             item_rct.centerx = random.randint(0, scrn_rct.width)
             item_rct.centery = random.randint(0, scrn_rct.width)
-        
-        
 
-        count += 1
-        #練習６
-        for i in range(bomb):
-            if count%10000 == 0:
+        count += 1 #繰り返しの数をカウント
+    
+        for i in range(bomb): 
+            if count%10000 == 0:#時間経過で爆弾を加速させる
                 if vx[i] < 0:
                     vx[i] -= 1
                 
@@ -134,17 +138,15 @@ def main():
                 else:
                     vy[i] += 1
 
-            bomb_rct_lst[i].move_ip(vx[i], vy[i])
+            bomb_rct_lst[i].move_ip(vx[i], vy[i]) #爆弾の挙動
             scrn_sfc.blit(bomb_sfc, bomb_rct_lst[i])
-            yoko, tate =  check_bound(bomb_rct_lst[i], scrn_rct)
+            yoko, tate =  check_bound(bomb_rct_lst[i], scrn_rct) #壁に当たったかの判定
             vx[i] *= yoko
             vy[i] *= tate
-        
-        #練習８
 
         for bomb_rct in bomb_rct_lst:
             if tori_rct.colliderect(bomb_rct):
-                if price:
+                if price: #爆弾に当たった時無敵モードだったら解除する
                     scrn_sfc.blit(tori_sfc, tori_rct)
                     price = False
                     up = count
@@ -152,8 +154,15 @@ def main():
                 elif count - up < 300:
                     pass
                 
-                else:
+                else: #無敵じゃないときに爆弾に当たった場合
                     return
+        
+        if count > 20000: #ゴールの表示
+            scrn_sfc.blit(goal_sfc, goal_rct)
+        
+        if tori_rct.colliderect(goal_rct): #ゴールに当たったら終了
+            goal = True
+            return
         pg.display.update()
         clock.tick(1000)
 

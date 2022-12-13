@@ -45,13 +45,14 @@ def main():
     item_rct.centery = random.randint(0, scrn_rct.width)
     scrn_sfc.blit(item_sfc, item_rct)
 
+    '''
     #ゴールの仕様
     goal_sfc = pg.image.load("fig/goal.jpeg")
     goal_sfc = pg.transform.rotozoom(goal_sfc, 0, 0.01)
     goal_rct = item_sfc.get_rect()
     goal_rct.centerx = random.randint(0, scrn_rct.width)
     goal_rct.centery = random.randint(0, scrn_rct.width)
-    
+    '''
 
     #爆弾の仕様
     bomb_rct_lst = [] #爆弾の情報を入れるリスト
@@ -157,12 +158,12 @@ def main():
                 else: #無敵じゃないときに爆弾に当たった場合
                     return
         
-        if count > 20000: #ゴールの表示
-            scrn_sfc.blit(goal_sfc, goal_rct)
+        #if count > 20000: #ゴールの表示
+        #    scrn_sfc.blit(goal_sfc, goal_rct)
         
-        if tori_rct.colliderect(goal_rct): #ゴールに当たったら終了
-            goal = True
-            return
+        #if tori_rct.colliderect(goal_rct): #ゴールに当たったら終了
+         #   goal = True
+            #return
         pg.display.update()
         clock.tick(1000)
 

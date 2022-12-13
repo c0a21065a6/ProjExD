@@ -21,10 +21,27 @@ def main():
     #練習2
     while True:
         scrn_sfc.blit(pgbg_sfc, pgbg_rct)
-        
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
+        
+        #れんしゅう４
+        key_dct = pg.key.get_pressed()
+        if key_dct[pg.K_UP]:
+            tori_rct.centery -= 1
+        
+        if key_dct[pg.K_DOWN]:
+            tori_rct.centery += 1
+
+        if key_dct[pg.K_LEFT]:
+            tori_rct.centerx -= 1
+        
+        if key_dct[pg.K_RIGHT]:
+            tori_rct.centerx += 1
+
+        scrn_sfc.blit(tori_sfc, tori_rct)
+
         pg.display.update()
         clock.tick(1000)
 

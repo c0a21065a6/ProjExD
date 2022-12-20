@@ -29,6 +29,7 @@ class Bird: #こうかとんクラス
         self.rct = self.sfc.get_rect()
         self.rct.center = xy
         self.price = False
+        self.move = True
 
     def blit(self, scr:Screen):
         scr.sfc.blit(self.sfc, self.rct)
@@ -102,7 +103,6 @@ class Item: #無敵アイテムクラス
             if count > 4000:
                 scr.sfc.blit(self.sfc, self.rct)
                 if kkt.rct.colliderect(self.rct):
-                    timee = 0
                     kkt.price = True
                     kkt.nsfc = pg.image.load("fig/6.png")
                     kkt.nsfc = pg.transform.rotozoom(kkt.nsfc, 0, 2.0)
@@ -134,7 +134,34 @@ class finish: #爆弾とこうかとんの衝突クラス
 
             
 class Karashu: #敵キャラクラス  
-    print("終わらん")
+    def __init__(self, img_path, ratio, xy):
+        self.sfc = pg.image.load(img_path)
+        self.sfc = pg.transform.rotozoom(self.sfc, 0, ratio)
+        self.rct = self.sfc.get_rect()
+        self.rct.center = xy
+        self.vx = random.randint(-2, 2)
+        self.vy = random.randint(-2, 2)
+        self.ti = 0 
+    
+    def blit(self, scr:Screen):
+        scr.sfc.blit(self.sfc, self.rct)
+
+    def update(self, scr:Screen):
+        self.rct.move_ip(self.vx, self.vy)
+        self.sfc.blit(self.sfc, self.rct) 
+        yoko, tate = check_bound(self.rct, scr.rct)
+        self.vx *= yoko
+        self.vy *= tate
+        self.blit(scr)
+    
+    def fire(self, clock, kkt:Bird):
+        if self.rct.colliderect(kkt.rct):
+            self.ti = clock
+            kkt.move = False
+        
+        if clock - self.ti > 500:
+            kkt.move = True
+
 
 def main():
     clock =pg.time.Clock()
@@ -149,24 +176,28 @@ def main():
         bkd = Bomb((255, 0, 0), 10, (+1, +1), scr)
         bkd_lst.append(bkd)    
     bkd.update(scr)   
-   
+
     check = 0#フレーム数のカウント関数
     item = Item(scr)#アイテムの生成
     fin = finish()#衝突クラスを作成
+    vir = Karashu("karasu.png", 1.0, (100, 100))
     while True:
         scr.blit()
 
         for event in pg.event.get():#途中終了方法
             if event.type == pg.QUIT:
                 return
-
-        kkt.update(scr)#こうかとんの挙動
+        
+        vir.update(scr)
+        vir.blit(scr)
+        vir.fire(check, kkt)
+        if kkt.move:
+            kkt.update(scr)#こうかとんの挙動
         
         item.check(scr, kkt, check)#こうかとんがアイテムを拾う
         
         check += 1
         
-
         for i in range(5):#ゲームオーバーの確認
             bkd_lst[i].update(scr)
             fin.check(kkt, bkd_lst[i], scr, check)

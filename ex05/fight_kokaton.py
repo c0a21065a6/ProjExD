@@ -3,7 +3,7 @@ import random
 import sys
 
 
-class Screen:
+class Screen: #背景クラス
     def __init__(self, title, wh, img_path):
         pg.display.set_caption(title)
         self.sfc = pg.display.set_mode(wh)
@@ -15,7 +15,7 @@ class Screen:
         self.sfc.blit(self.bgi_sfc, self.bgi_rct)
         
 
-class Bird:
+class Bird: #こうかとんクラス
     key_delta = {
     pg.K_UP:    [0, -1],
     pg.K_DOWN:  [0, +1],
@@ -44,10 +44,8 @@ class Bird:
                 self.rct.centerx -= delta[0]
                 self.rct.centery -= delta[1]
 
-        #self.blit(scr)
 
-
-class Bomb:
+class Bomb: #爆弾クラス
     def __init__(self, color, rad, vxy, scr:Screen):
         self.color = color
         self.rad = rad
@@ -84,7 +82,7 @@ def check_bound(obj_rct, scr_rct):
         tate = -1
     return yoko, tate
 
-class Item:
+class Item: #無敵アイテムクラス
     def __init__(self, scr:Screen):
         self.sfc = pg.image.load("fig/present.png")
         self.sfc = pg.transform.rotozoom(self.sfc, 0, 0.1)
@@ -115,7 +113,7 @@ class Item:
             self.rct.centerx = random.randint(0, scr.rct.width)
             self.rct.centery = random.randint(0, scr.rct.width)
 
-class finish:
+class finish: #爆弾とこうかとんの衝突クラス
     def __init__(self):
         self.val = False
     def check(self, kkt:Bird, bmd:Bomb, scr:Screen, count):
@@ -135,47 +133,41 @@ class finish:
                     self.val = True
 
             
-class Karashu:
-    
-        
-        
+class Karashu: #敵キャラクラス  
+    print("終わらん")
 
-        
-
-        
 def main():
     clock =pg.time.Clock()
     
-    scr = Screen("負けるな！こうかとん", (1600, 900), "fig/pg_bg.jpg")
+    scr = Screen("負けるな！こうかとん", (1600, 900), "fig/pg_bg.jpg")#背景の生成
 
-    kkt = Bird("fig/3.png", 2.0, (900, 400))
-    kkt.blit(scr)
+    kkt = Bird("fig/3.png", 2.0, (900, 400))#こうかとんの生成
+    kkt.blit(scr)#こうかとんの表示
 
-    bkd_lst = []
-    for i in range(5):
+    bkd_lst = []#爆弾のリスト
+    for i in range(5):#爆弾の生成
         bkd = Bomb((255, 0, 0), 10, (+1, +1), scr)
         bkd_lst.append(bkd)    
     bkd.update(scr)   
    
-    
-    check = 0
-    item = Item(scr)
-    fin = finish()
+    check = 0#フレーム数のカウント関数
+    item = Item(scr)#アイテムの生成
+    fin = finish()#衝突クラスを作成
     while True:
-        scr.blit() #pgbg_sfc, pgbg_rct
+        scr.blit()
 
-        for event in pg.event.get():
+        for event in pg.event.get():#途中終了方法
             if event.type == pg.QUIT:
                 return
 
-        kkt.update(scr)
+        kkt.update(scr)#こうかとんの挙動
         
-        item.check(scr, kkt, check)
+        item.check(scr, kkt, check)#こうかとんがアイテムを拾う
         
         check += 1
         
 
-        for i in range(5):
+        for i in range(5):#ゲームオーバーの確認
             bkd_lst[i].update(scr)
             fin.check(kkt, bkd_lst[i], scr, check)
             if fin.val:

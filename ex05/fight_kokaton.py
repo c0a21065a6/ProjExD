@@ -154,13 +154,13 @@ class Karashu: #敵キャラクラス
         self.vy *= tate
         self.blit(scr)
     
-    def fire(self, clock, kkt:Bird):
+    def fire(self, clock, kkt:Bird, scr): #敵キャラに当たった場合
         if self.rct.colliderect(kkt.rct):
             self.ti = clock
             kkt.move = False
         
         if clock - self.ti > 500:
-            kkt.move = True
+            kkt.move = True        
 
 
 def main():
@@ -190,7 +190,7 @@ def main():
         
         vir.update(scr)
         vir.blit(scr)
-        vir.fire(check, kkt)
+        vir.fire(check, kkt, scr)
         if kkt.move:
             kkt.update(scr)#こうかとんの挙動
         

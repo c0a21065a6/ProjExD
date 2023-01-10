@@ -66,21 +66,22 @@ class Player:
             if key_dct[key]:
                 self.rct.centerx += delta[0]
                 self.rct.centery += delta[1]
-            # if check_bound(self.rct, scr.rct) != (+1, +1):
-            #     self.rct.centerx -= delta[0]
-            #     self.rct.centery -= delta[1]
+            if check_bound(self.rct, scr.rct) != (+1, +1):
+                self.rct.centerx -= delta[0]
+                self.rct.centery -= delta[1]
         self.blit(scr)
 
 
 class Ball:  # ボールのクラス
-    def __init__(self, color, rad, vxy, scr: Screen):
+    def __init__(self, color, xy, rad, vxy, scr: Screen):
         self.sfc = pg.Surface((2*rad, 2*rad))  # 正方形の空のSurface
         self.sfc.set_colorkey((0, 0, 0))
         pg.draw.circle(self.sfc, color, (rad, rad), rad)
         self.rct = self.sfc.get_rect()
-        self.rct.centerx = 100
-        self.rct.centery = 100
+        self.rct.center = xy
         self.vx, self.vy = vxy
+        self.vx = random.choice((self.vx, -1 * self.vx))
+        self.vy = random.choice((self.vy, -1 * self.vy))
 
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
@@ -131,7 +132,8 @@ def main():
     p2 = Player((0, 255, 0), (900, 500), 10, 100, key_delta_p2, scr)
     p2.blit(scr)
 
-    ball = Ball((0, 122, 122), 10, (1, 1), scr)
+
+    ball = Ball((0, 122, 122), (660, 350), 10, (1, 1), scr)
     ball.update(scr)
 
     while True:
@@ -155,13 +157,11 @@ def main():
         elif p2.rct.colliderect(ball.rct):
             ball.vx *= -1
 
+        if ball.rct.left < scr.rct.left or scr.rct.right < ball.rct.right: #出たとき
+            return
 
         pg.display.update()
         clock.tick(1000)
-
-        if ball.rct.left <= scr.rct.left or scr.rct.right <= ball.rct.right:
-            return
-            
 
 
 if __name__ == "__main__":

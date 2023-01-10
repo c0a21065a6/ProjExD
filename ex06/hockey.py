@@ -98,6 +98,31 @@ class Ball:  # ボールのクラス
         self.blit(scr)
 
 
+class Scoreboard:
+    def __init__(self, color, xy, yoko, tate, px, scr: Screen):
+        self.sfc = pg.Surface((yoko, tate))  # 正方形の空のSurface
+        self.sfc.set_colorkey((0, 0, 0))
+        pg.draw.rect(self.sfc, color, (0, 0, yoko, tate), width=0)
+        self.rct = self.sfc.get_rect()
+        self.rct.center = xy
+        self.px = px
+
+    def font_1(self, score: str):
+        font = pg.font.Font(None, self.px)
+        text = font.render(score, True, (255, 255, 255))
+        self.blit(text, [20, 100])
+
+    def font_2(self, score: str):
+        font = pg.font.Font(None, self.px)
+        text = font.render(score, True, (255, 255, 255))
+        self.blit(text, [20, 100])
+
+    def blit(self, scr: Screen):
+        scr.sfc.blit(self.sfc, self.rct)
+
+    def update(self, scr: Screen):
+        self.blit(scr)
+
 def check_bound(obj_rct, scr_rct):
     """
     第1引数：こうかとんrectまたは爆弾rect
@@ -147,6 +172,8 @@ def main():
         scr.blit()
         p1.update(scr)
         p2.update(scr)
+        
+        p1_score, p2_score = 0, 0
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -179,13 +206,14 @@ def main():
             ball.rct.center = (300, 350) 
             ball.vx = 0
             ball.vy = 0 
-               
+            p2_score += 1
         if scr.rct.right < ball.rct.right: #出たとき
             ball.rct.center = (1000, 350)  
             ball.vx = 0
             ball.vy = 0
+            p1_score += 1
             
-        
+        board.update(scr)
         ti += 1 #篠宮制作タイマー
         pg.display.update()
         clock.tick(1000)

@@ -94,6 +94,9 @@ class Ball:  # ボールのクラス
         self.blit(scr)
 
 
+#def Goal():
+
+
 def check_bound(obj_rct, scr_rct):
     """
     第1引数：こうかとんrectまたは爆弾rect
@@ -133,7 +136,7 @@ def main():
     p2.blit(scr)
 
 
-    ball = Ball((0, 122, 122), (660, 350), 10, (1, 1), scr)
+    ball = Ball((0, 122, 122), (660, 350), 10, (0, 0), scr)
     ball.update(scr)
 
     while True:
@@ -153,12 +156,22 @@ def main():
         ball.update(scr)
         #ボールとの衝突
         if p1.rct.colliderect(ball.rct):
-            ball.vx *= -1
+            if ball.vx == 0:
+                ball.vx = +1
+                ball.vy = random.random(-1, 1)
+            else:
+                ball.vx *= -1
         elif p2.rct.colliderect(ball.rct):
             ball.vx *= -1
 
-        if ball.rct.left < scr.rct.left or scr.rct.right < ball.rct.right: #出たとき
-            return
+        if ball.rct.left < scr.rct.left:#しゅんやみて
+            ball.rct.center = (300, 400) 
+            ball.vx = 0
+            ball.vy = 0    
+        if scr.rct.right < ball.rct.right: #出たとき
+            ball.rct.center = (1000, 350)  
+            ball.vx = 0
+            ball.vy = 0
 
         pg.display.update()
         clock.tick(1000)

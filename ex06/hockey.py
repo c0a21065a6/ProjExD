@@ -78,7 +78,11 @@ class Ball:  # ボールのクラス
         self.sfc.set_colorkey((0, 0, 0))
         pg.draw.circle(self.sfc, color, (rad, rad), rad)
         self.rct = self.sfc.get_rect()
-        self.rct.center = xy
+        if random.randint(0, 1) == 0: #ゲーム開始時に1P,2Pのどちらかが静止したボールを保持できるようにした
+            self.rct.center = (300, 350)
+        
+        else:
+            self.rct.center = (1000, 350)
         self.vx, self.vy = vxy
         self.vx = random.choice((self.vx, -1 * self.vx))
         self.vy = random.choice((self.vy, -1 * self.vy))
@@ -92,9 +96,6 @@ class Ball:  # ボールのクラス
         self.vx *= yoko
         self.vy *= tate
         self.blit(scr)
-
-
-#def Goal():
 
 
 def check_bound(obj_rct, scr_rct):
@@ -139,6 +140,9 @@ def main():
     ball = Ball((0, 122, 122), (660, 350), 10, (0, 0), scr)
     ball.update(scr)
 
+    ti = 4000#追加機能：タイマー(篠宮)
+    cl = 0
+
     while True:
         scr.blit()
         p1.update(scr)
@@ -155,24 +159,34 @@ def main():
 
         ball.update(scr)
         #ボールとの衝突
-        if p1.rct.colliderect(ball.rct):
-            if ball.vx == 0:
-                ball.vx = +1
-                ball.vy = random.random(-1, 1)
-            else:
-                ball.vx *= -1
-        elif p2.rct.colliderect(ball.rct):
-            ball.vx *= -1
+        if ti - cl > 400: #追加機能：初速を与えた際すぐに下記のif文が反応してしまうことを防ぐため
+            if p1.rct.colliderect(ball.rct):#追加機能ボールが速度が0の時にプレイヤーが触ると動き出すようにした
+                if ball.vx == 0:
+                    ball.vx = +1
+                    ball.vy = random.choice([-1, 1])
+                    cl = ti
+                else:
+                    ball.vx *= -1
+            elif p2.rct.colliderect(ball.rct):
+                if ball.vx == 0:
+                    ball.vx = -1
+                    ball.vy = random.choice([-1, 1])
+                    cl = ti
+                else:
+                    ball.vx *= -1
 
-        if ball.rct.left < scr.rct.left:#しゅんやみて
-            ball.rct.center = (300, 400) 
+        if ball.rct.left < scr.rct.left:#追加機能：ゴールに入った時に得点された側がボールを保持した状態で始められるようにした
+            ball.rct.center = (300, 350) 
             ball.vx = 0
-            ball.vy = 0    
+            ball.vy = 0 
+               
         if scr.rct.right < ball.rct.right: #出たとき
             ball.rct.center = (1000, 350)  
             ball.vx = 0
             ball.vy = 0
-
+            
+        
+        ti += 1 #篠宮制作タイマー
         pg.display.update()
         clock.tick(1000)
 

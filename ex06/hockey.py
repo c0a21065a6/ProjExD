@@ -124,7 +124,7 @@ def main():
         pg.K_a:  [-1, 0],
         pg.K_d: [+1, 0],
     }
-    p1 = Player((255, 0, 0), (100, 500), 10, 100, key_delta_p1, scr)
+    p1 = Player((255, 0, 0), (100, 350), 10, 100, key_delta_p1, scr)
     p1.blit(scr)
 
     key_delta_p2 = {
@@ -133,7 +133,7 @@ def main():
         pg.K_LEFT:  [-1, 0],
         pg.K_RIGHT: [+1, 0],
     }
-    p2 = Player((0, 255, 0), (900, 500), 10, 100, key_delta_p2, scr)
+    p2 = Player((0, 255, 0), (1100, 350), 10, 100, key_delta_p2, scr)
     p2.blit(scr)
 
 

@@ -47,10 +47,10 @@ class Screen:  # スクリーン
 
 
 class Player:
-    def __init__(self, color, xy, yoko, tate, key_delta, scr : Screen):
+    def __init__(self, color, xy, yoko, tate, key_delta, scr: Screen):
         self.sfc = pg.Surface((yoko, tate))  # 正方形の空のSurface
         self.sfc.set_colorkey((0, 0, 0))
-        pg.draw.rect(self.sfc, color, (0, 0, yoko, tate), width = 0)
+        pg.draw.rect(self.sfc, color, (0, 0, yoko, tate), width=0)
         self.rct = self.sfc.get_rect()
         self.rct.center = xy
         self.key_delta = key_delta
@@ -78,9 +78,9 @@ class Ball:  # ボールのクラス
         self.sfc.set_colorkey((0, 0, 0))
         pg.draw.circle(self.sfc, color, (rad, rad), rad)
         self.rct = self.sfc.get_rect()
-        if random.randint(0, 1) == 0: #ゲーム開始時に1P,2Pのどちらかが静止したボールを保持できるようにした
+        if random.randint(0, 1) == 0:  # ゲーム開始時に1P,2Pのどちらかが静止したボールを保持できるようにした
             self.rct.center = (300, 350)
-        
+
         else:
             self.rct.center = (1000, 350)
         self.vx, self.vy = vxy
@@ -98,6 +98,26 @@ class Ball:  # ボールのクラス
         self.blit(scr)
 
 
+
+class Scoreboard:
+    def __init__(self, color, xy, yoko, tate, px, scr: Screen):
+        self.sfc = pg.Surface((yoko, tate))  # 正方形の空のSurface
+        self.sfc.set_colorkey((0, 0, 0))
+        pg.draw.rect(self.sfc, color, (0, 0, yoko, tate), width=0)
+        self.rct = self.sfc.get_rect()
+        self.rct.center = xy
+        self.px = px
+
+    def font_1(self, score: str):
+        font = pg.font.Font(None, self.px)
+        text = font.render(score, True, (255, 255, 255))
+        self.blit(text, [20, 100])
+
+    def font_2(self, score: str):
+        font = pg.font.Font(None, self.px)
+        text = font.render(score, True, (255, 255, 255))
+        self.blit(text, [20, 100])
+
 class Kabe:  # コートの角のクラス
 
     def __init__(self, color, xy, scr: Screen):  # pointsは鋭角, 直角, 鋭角の順
@@ -108,8 +128,13 @@ class Kabe:  # コートの角のクラス
         self.rct = self.sfc.get_rect()
         self.rct.center = xy
 
+
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
+
+
+    def update(self, scr: Screen):
+        self.blit(scr)
 
 
 def check_bound(obj_rct, scr_rct):
@@ -124,7 +149,7 @@ def check_bound(obj_rct, scr_rct):
     if obj_rct.top < scr_rct.top or scr_rct.bottom < obj_rct.bottom:
         tate = -1
     return yoko, tate
-    
+
 
 def main():
     global fullscreen
@@ -160,11 +185,10 @@ def main():
     p2 = Player((0, 255, 0), (1100, 350), 10, 100, key_delta_p2, scr)
     p2.blit(scr)
 
-
     ball = Ball((0, 122, 122), (660, 350), 10, (0, 0), scr)
     ball.update(scr)
 
-    ti = 4000#追加機能：タイマー(篠宮)
+    ti = 4000  # 追加機能：タイマー(篠宮)
     cl = 0
 
     while True:
@@ -173,6 +197,8 @@ def main():
             kabe.blit(scr)
         p1.update(scr)
         p2.update(scr)
+
+        p1_score, p2_score = 0, 0
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -185,8 +211,8 @@ def main():
 
         ball.update(scr)
         #ボールとの衝突
-        if ti - cl > 400: #追加機能：初速を与えた際すぐに下記のif文が反応してしまうことを防ぐため
-            if p1.rct.colliderect(ball.rct):#追加機能ボールが速度が0の時にプレイヤーが触ると動き出すようにした
+        if ti - cl > 400:  # 追加機能：初速を与えた際すぐに下記のif文が反応してしまうことを防ぐため
+            if p1.rct.colliderect(ball.rct):  # 追加機能ボールが速度が0の時にプレイヤーが触ると動き出すようにした
                 if ball.vx == 0:
                     ball.vx = +1
                     ball.vy = random.choice([-1, 1])
@@ -206,18 +232,19 @@ def main():
                 ball.vx = -1 * ball.vx
                 ball.vy = -1 * ball.vy
 
-        if ball.rct.left < scr.rct.left:#追加機能：ゴールに入った時に得点された側がボールを保持した状態で始められるようにした
-            ball.rct.center = (300, 350) 
-            ball.vx = 0
-            ball.vy = 0 
-               
-        if scr.rct.right < ball.rct.right: #出たとき
-            ball.rct.center = (1000, 350)  
+        if ball.rct.left < scr.rct.left:  # 追加機能：ゴールに入った時に得点された側がボールを保持した状態で始められるようにした
+            ball.rct.center = (300, 350)
             ball.vx = 0
             ball.vy = 0
-            
-        
-        ti += 1 #篠宮制作タイマー
+            p2_score += 1
+        if scr.rct.right < ball.rct.right:  # 出たとき
+            ball.rct.center = (1000, 350)
+            ball.vx = 0
+            ball.vy = 0
+            p1_score += 1
+
+        board.update(scr)
+        ti += 1  # 篠宮制作タイマー
         pg.display.update()
         clock.tick(1000)
 

@@ -121,7 +121,7 @@ class Scoreboard:
 class Kabe:  # コートの角のクラス
 
     def __init__(self, color, xy, scr: Screen):  # pointsは鋭角, 直角, 鋭角の順
-        self.sfc = pg.Surface((200, 200))  # 正方形の空のSurface
+        self.sfc = pg.Surface((100, 100))  # 正方形の空のSurface
         self.sfc.set_colorkey((0, 0, 0))
 
         pg.draw.rect(self.sfc, color, (0, 0, 200, 200))  # 三角形を作成

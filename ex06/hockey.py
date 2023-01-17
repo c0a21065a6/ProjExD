@@ -116,6 +116,15 @@ class Scoreboard:
         font = pg.font.Font(None, self.px)
         text = font.render(score, True, (255, 255, 255))
         self.blit(text, [20, 100])
+class Kabe:  # コートの角のクラス
+
+    def __init__(self, color, xy, scr: Screen):  # pointsは鋭角, 直角, 鋭角の順
+        self.sfc = pg.Surface((200, 200))  # 正方形の空のSurface
+        self.sfc.set_colorkey((0, 0, 0))
+
+        pg.draw.rect(self.sfc, color, (0, 0, 200, 200))  # 三角形を作成
+        self.rct = self.sfc.get_rect()
+        self.rct.center = xy
 
     def blit(self, scr: Screen):
         scr.sfc.blit(self.sfc, self.rct)
@@ -144,6 +153,16 @@ def main():
     scr = Screen("2Dテニス", SCREENRECT.size, "fig/tennis_court.jpg")
     fullscreen = False  # フルスクリーン無効
 
+    xys = [(100, SCREENRECT.bottom-100), (100, 100), (SCREENRECT.width-100, 100),
+           (SCREENRECT.width-100, SCREENRECT.height-100)]
+
+    kabes = []  # 4つの壁のインスタンスを格納するリスト
+
+    for xy in xys:
+        kabe = Kabe((0, 0, 255), xy, scr)
+        kabes.append(kabe)
+        kabe.blit(scr)
+
     key_delta_p1 = {
         pg.K_w:    [0, -1],
         pg.K_s:  [0, +1],
@@ -170,6 +189,8 @@ def main():
 
     while True:
         scr.blit()
+        for kabe in kabes:
+            kabe.blit(scr)
         p1.update(scr)
         p2.update(scr)
 
@@ -201,6 +222,11 @@ def main():
                     cl = ti
                 else:
                     ball.vx *= -1
+                    
+        for kabe in kabes:  # 壁との衝突
+            if kabe.rct.colliderect(ball.rct):
+                ball.vx = -1 * ball.vx
+                ball.vy = -1 * ball.vy
 
         if ball.rct.left < scr.rct.left:  # 追加機能：ゴールに入った時に得点された側がボールを保持した状態で始められるようにした
             ball.rct.center = (300, 350)

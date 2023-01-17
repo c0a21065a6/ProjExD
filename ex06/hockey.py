@@ -186,8 +186,8 @@ def main():
     # テキストのインスタンス生成
     text = Texts()
 
-    xys = [(100, SCREENRECT.bottom-100), (100, 100), (SCREENRECT.width-100, 100),
-           (SCREENRECT.width-100, SCREENRECT.height-100)]
+    xys = [(50, SCREENRECT.bottom-50), (50, 50), (SCREENRECT.width-50, 50),
+           (SCREENRECT.width-50, SCREENRECT.height-50)]
 
     kabes = []  # 4つの壁のインスタンスを格納するリスト
 

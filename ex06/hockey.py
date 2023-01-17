@@ -151,6 +151,21 @@ def check_bound(obj_rct, scr_rct):
     return yoko, tate
 
 
+def start():#追加機能start画面の作成（宮川）
+    scr1 = Screen("2Dテニス", SCREENRECT.size, "fig/tennis_court.jpg")
+    clock = pg.time.Clock()
+    while True:
+        scr1.blit()
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                return
+        key_dct = pg.key.get_pressed() #辞書型
+        if key_dct[pg.K_SPACE]:
+            return
+        pg.display.update()
+        clock.tick(1000)
+
+
 def main():
     global fullscreen
     clock = pg.time.Clock()
@@ -251,6 +266,7 @@ def main():
 
 if __name__ == "__main__":
     pg.init()
+    start()
     main()
     pg.quit()
     sys.exit()

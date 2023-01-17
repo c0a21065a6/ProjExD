@@ -151,6 +151,18 @@ def check_bound(obj_rct, scr_rct):
     return yoko, tate
 
 
+# スコアを表示するクラス
+class Texts:
+    def __init__(self):
+        self.font = pg.font.SysFont("msgotic", 70)
+
+    def update(self, scr: Screen, score_1, score_2):
+        self.txt = self.font.render(
+            f"{score_1}----{score_2}", True, (65, 125, 105)
+        )
+        scr.sfc.blit(self.txt, (scr.rct.width/2-60, scr.rct.height-100))
+
+
 def start():#追加機能start画面の作成（宮川）
     scr1 = Screen("2Dテニス", SCREENRECT.size, "fig/tennis_court.jpg")
     clock = pg.time.Clock()
@@ -171,6 +183,8 @@ def main():
     clock = pg.time.Clock()
     scr = Screen("2Dテニス", SCREENRECT.size, "fig/tennis_court.jpg")
     fullscreen = False  # フルスクリーン無効
+    # テキストのインスタンス生成
+    text = Texts()
 
     xys = [(100, SCREENRECT.bottom-100), (100, 100), (SCREENRECT.width-100, 100),
            (SCREENRECT.width-100, SCREENRECT.height-100)]
@@ -260,6 +274,7 @@ def main():
 
         #board.update(scr)
         ti += 1  # 篠宮制作タイマー
+        text.update(scr, p1_score, p2_score)
         pg.display.update()
         clock.tick(1000)
 

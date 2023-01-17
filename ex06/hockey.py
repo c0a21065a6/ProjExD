@@ -258,7 +258,7 @@ def main():
             ball.vy = 0
             p1_score += 1
 
-        board.update(scr)
+        #board.update(scr)
         ti += 1  # 篠宮制作タイマー
         pg.display.update()
         clock.tick(1000)
